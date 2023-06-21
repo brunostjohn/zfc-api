@@ -2,15 +2,15 @@ FROM node:16-alpine as builder
 
 WORKDIR /app
 
-COPY ["package.json","yarn.lock","./"]
+COPY ["package.json","package-lock.json","./"]
 
-RUN yarn install
+RUN npm install
 
 COPY ["./src","./src"]
 
 COPY ["tsconfig.json","tsconfig.build.json","./"]
 
-RUN yarn build
+RUN npm run build
 
 FROM node:16-alpine as final
 
@@ -22,10 +22,10 @@ COPY --from=builder /app/package.json /app/
 
 COPY --from=builder /app/yarn.lock /app/
 
-RUN yarn install --production
+RUN npm install --production
 
 ENV PORT=5000
 
 ENV NODE_ENV=production
 
-CMD ["yarn","run","start:prod"]
+CMD ["npm","run","start:prod"]

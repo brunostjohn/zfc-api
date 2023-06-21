@@ -1,26 +1,23 @@
 import "dotenv/config";
-import http, {Server} from "http";
+import http, { Server } from "http";
 import app from "./app";
-import {ConfigService} from "./config";
+import { ConfigService } from "./config";
 
 ConfigService.load();
 
-function listenAsync(server:Server, port:number)
-{
-    return new Promise((resolve, reject)=> {
-        server.listen(port)
-            .once('listening',resolve)
-            .once('error',reject);
+function listenAsync(server: Server, port: number) {
+    return new Promise((resolve, reject) => {
+        server.listen(port).once("listening", resolve).once("error", reject);
     });
 }
 
-async function main()
-{
+async function main() {
     const server = http.createServer(app);
 
     const port = process.env.PORT && parseInt(process.env.PORT);
 
-    await listenAsync(server,port || 5000);
+    await listenAsync(server, port || 5000);
 }
 
-main().catch(err => console.error);
+// eslint-disable-next-line no-console
+main().catch((err) => console.error);
