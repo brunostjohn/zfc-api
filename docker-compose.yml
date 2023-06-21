@@ -19,6 +19,8 @@ services:
       restart: always
       volumes:
         - ./mysql-data:/var/lib/mysql # UPDATE IN PROD
-      environment:
-        MYSQL_ROOT_PASSWORD: zfc-stuff # CHANGE
-        MYSQL_DATABASE: zfc
+      env_file:
+        - .env
+      # environment:
+      #   MYSQL_ROOT_PASSWORD: zfc-stuff # CHANGE
+      #   MYSQL_DATABASE: zfc
