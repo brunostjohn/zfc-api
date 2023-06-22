@@ -9,18 +9,22 @@ services:
       - .env
     volumes:
       - ./src:/app/src
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "5000:5000"
       - "9229:9229"
     
-    db:
-      image: mysql
-      command: --default-authentication-plugin=mysql_native_password # REMOVE IN PROD
-      restart: always
-      volumes:
-        - ./mysql-data:/var/lib/mysql # UPDATE IN PROD
-      env_file:
-        - .env
-      # environment:
-      #   MYSQL_ROOT_PASSWORD: zfc-stuff # CHANGE
-      #   MYSQL_DATABASE: zfc
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password # REMOVE IN PROD
+    restart: always
+    volumes:
+      - ./mysql-data:/var/lib/mysql # UPDATE IN PROD
+    env_file:
+      - .env
+    healthcheck:
+            test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+            timeout: 2s
+            retries: 10

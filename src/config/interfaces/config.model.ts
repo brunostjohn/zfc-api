@@ -1,5 +1,6 @@
 export interface EnvironmentVariables {
-    db_url: string;
+    db_pwd: string;
+    gh_token: string;
     app_mode?: string;
 }
 

@@ -1,13 +1,24 @@
+/* eslint-disable no-console */
 import express from "express";
-import { Sequelize } from "sequelize";
-
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-const db = new Sequelize(`mysql://root:${process.env.MYSQL_PWD}@db:3306/zfc`);
+import { initDb } from "./db";
 
 const app = express();
 
+let db, theme;
+
+initDb()
+    .then(([Db, Theme]) => {
+        db = Db;
+        theme = Theme;
+    })
+    .catch((e) => console.log(e));
+
 app.get("/", (req, res) => {
     return res.send("pong");
+});
+
+app.get("/featured", (req, res) => {
+    return res.send("feat");
 });
 
 export default app;
