@@ -20,7 +20,7 @@ COPY --from=builder /app/dist /app/dist/
 
 COPY --from=builder /app/package.json /app/
 
-COPY --from=builder /app/yarn.lock /app/
+COPY --from=builder /app/package-lock.json /app/
 
 RUN npm install --production
 

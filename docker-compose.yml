@@ -4,20 +4,21 @@ services:
     container_name: zfc-api
     image: zfc-api
     build: 
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
     env_file:
       - .env
     volumes:
       - ./src:/app/src
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
       - "5000:5000"
       - "9229:9229"
     
   db:
     image: mysql
+    container_name: db
     command: --default-authentication-plugin=mysql_native_password # REMOVE IN PROD
     restart: always
     volumes:
@@ -25,6 +26,9 @@ services:
     env_file:
       - .env
     healthcheck:
-            test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
-            timeout: 2s
-            retries: 10
+        test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+        timeout: 2s
+        retries: 10
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: zfc-stuff # CHANGE
+    #   MYSQL_DATABASE: zfc

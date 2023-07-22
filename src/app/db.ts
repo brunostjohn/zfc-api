@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import { ConfigService } from "../config";
 
 export async function initDb() {
+    ConfigService.load();
     const db = new Sequelize(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         `mysql://root:${ConfigService.get("db_pwd")}@db:3306/zfc`
@@ -12,9 +13,10 @@ export async function initDb() {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            primaryKey: true,
         },
         dlList: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         dlNum: {
@@ -26,6 +28,14 @@ export async function initDb() {
             allowNull: false,
         },
         manifestDl: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        colour: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        imageSrc: {
             type: DataTypes.STRING,
             allowNull: false,
         },
